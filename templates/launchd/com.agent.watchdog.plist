@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.{{AGENT_SESSION_NAME}}.watchdog</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+		<string>{{PROJECT_DIR}}/.claude/scripts/watchdog.sh</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>AGENT_SESSION_NAME</key>
+		<string>{{AGENT_SESSION_NAME}}</string>
+		<key>AGENT_PROJECT_DIR</key>
+		<string>{{PROJECT_DIR}}</string>
+	</dict>
+	<key>StartInterval</key>
+	<integer>300</integer>
+	<key>StandardOutPath</key>
+	<string>{{PROJECT_DIR}}/.claude/runtime/launchd/watchdog-out.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{PROJECT_DIR}}/.claude/runtime/launchd/watchdog-err.log</string>
+</dict>
+</plist>

@@ -1,0 +1,73 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[SYSTEM] Session started at $(date '+%Y-%m-%d %H:%M %Z'). Persistent recurring tasks are managed by the OS scheduler. Do not create duplicate /loop versions of heartbeat, distill-session, or promote unless explicitly asked for temporary session-scoped reminders.\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Agent needs your attention\" with title \"Agent\" sound name \"Glass\"' 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The conversation is about to be compacted. Before that happens, write a summary of this session to the daily log. Append to daily-logs/$(date '+%Y-%m-%d').md with a ## heading showing the current time. Include: 1) What was accomplished (3-5 bullets) 2) Any open threads or unfinished tasks 3) Key decisions made 4) Any preferences or patterns observed. Keep it under 200 words. Create the file if it doesn't exist — start with '# Daily Log — YYYY-MM-DD' header."
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Session is ending. If this session had any meaningful interaction (not just startup), write a brief summary to daily-logs/$(date '+%Y-%m-%d').md. Append with a ## heading showing current time. Include what was discussed or accomplished in 2-5 bullets. If the session was trivial or empty (no user messages), just skip — do NOT write 'Session ended' lines. After writing (or skipping), run: python3 .claude/scripts/index-daily-logs.py"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/scripts/index-daily-logs.py 2>/dev/null; echo 'Daily logs re-indexed after compaction.'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[$(date '+%Y-%m-%d %H:%M:%S')] File modified\" >> .claude/edit-log.txt"
+          }
+        ]
+      }
+    ]
+  }
+}

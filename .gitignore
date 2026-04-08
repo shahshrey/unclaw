@@ -1,0 +1,7 @@
+daily-logs/
+.claude/edit-log.txt
+.claude/memory.db
+.claude/runtime/
+.claude/launchd-task-log.txt
+.firecrawl/
+.DS_Store

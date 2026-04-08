@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.{{AGENT_SESSION_NAME}}.task.self-improve</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+		<string>{{PROJECT_DIR}}/.claude/scripts/run-agent-command.sh</string>
+		<string>/self-improve</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>AGENT_SESSION_NAME</key>
+		<string>{{AGENT_SESSION_NAME}}</string>
+	</dict>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>2</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>{{PROJECT_DIR}}/.claude/runtime/launchd/self-improve-out.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{PROJECT_DIR}}/.claude/runtime/launchd/self-improve-err.log</string>
+</dict>
+</plist>

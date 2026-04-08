@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.{{AGENT_SESSION_NAME}}.assistant</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+		<string>{{PROJECT_DIR}}/start-agent.sh</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>AGENT_SESSION_NAME</key>
+		<string>{{AGENT_SESSION_NAME}}</string>
+		<key>AGENT_CHANNEL</key>
+		<string>{{AGENT_CHANNEL}}</string>
+	</dict>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<false/>
+	<key>StandardOutPath</key>
+	<string>{{PROJECT_DIR}}/.claude/runtime/launchd/assistant-out.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{PROJECT_DIR}}/.claude/runtime/launchd/assistant-err.log</string>
+</dict>
+</plist>
