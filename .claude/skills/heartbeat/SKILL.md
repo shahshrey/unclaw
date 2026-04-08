@@ -21,7 +21,7 @@ Proactive heartbeat — gather context first, then reason:
    - Any patterns in today's log that suggest an unfinished thread?
 
 3. **Act** based on what you find:
-   - If the channel server is DEAD -> run `bash ./start-agent.sh` to restart (the watchdog also does this, but belt-and-suspenders)
+   - If the channel server is DEAD -> run `bash ./bin/start-agent.sh` to restart (the watchdog also does this, but belt-and-suspenders)
    - If there are urgent pending items -> send a notification and summarize what needs attention
    - If there are stale uncommitted changes -> suggest committing or stashing
    - If nothing needs attention -> do nothing (don't generate output for the sake of it)

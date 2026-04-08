@@ -7,7 +7,7 @@ set -eu
 export PATH="$HOME/.bun/bin:$HOME/.local/bin:/opt/homebrew/bin:$PATH"
 
 PROJECT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
-AGENT_ENV_FILE="$PROJECT_DIR/agent.env"
+AGENT_ENV_FILE="$PROJECT_DIR/config/agent.env"
 RUNTIME_DIR="$PROJECT_DIR/.claude/runtime"
 INCIDENT_DIR="$RUNTIME_DIR/incidents"
 TASK_LOG="$PROJECT_DIR/.claude/launchd-task-log.txt"
@@ -58,7 +58,7 @@ write_snapshot() {
 if ! tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
   write_snapshot "session-missing"
   log "$SESSION_NAME session missing — starting via start-agent.sh"
-  /bin/bash "$PROJECT_DIR/start-agent.sh" >> "$TASK_LOG" 2>&1
+  /bin/bash "$PROJECT_DIR/bin/start-agent.sh" >> "$TASK_LOG" 2>&1
   exit 0
 fi
 
@@ -74,5 +74,5 @@ log "anomaly detected (bun=$BUN_COUNT claude=$CLAUDE_COUNT) — restarting"
 pkill -f "bun.*server\.ts" 2>/dev/null || true
 tmux kill-session -t "$SESSION_NAME" 2>/dev/null || true
 sleep 2
-/bin/bash "$PROJECT_DIR/start-agent.sh" >> "$TASK_LOG" 2>&1
+/bin/bash "$PROJECT_DIR/bin/start-agent.sh" >> "$TASK_LOG" 2>&1
 log "session restarted"

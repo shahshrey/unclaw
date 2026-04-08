@@ -5,7 +5,7 @@
 set -eu
 
 PROJECT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
-AGENT_ENV_FILE="$PROJECT_DIR/agent.env"
+AGENT_ENV_FILE="$PROJECT_DIR/config/agent.env"
 LOG_FILE="$PROJECT_DIR/.claude/launchd-task-log.txt"
 COMMAND="${*:-}"
 
@@ -34,7 +34,7 @@ log "Requested scheduled command: $COMMAND"
 
 if ! tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
   log "$SESSION_NAME session missing; starting via start-agent.sh"
-  /bin/bash "$PROJECT_DIR/start-agent.sh" >> "$LOG_FILE" 2>&1 || true
+  /bin/bash "$PROJECT_DIR/bin/start-agent.sh" >> "$LOG_FILE" 2>&1 || true
 fi
 
 for _ in $(seq 1 30); do

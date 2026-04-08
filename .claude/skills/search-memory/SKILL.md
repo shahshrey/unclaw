@@ -8,7 +8,7 @@ Search the memory system for past context:
 
 ## Search Order
 
-1. **Check hot memory first** — read `memory.md` (already in context, might have the answer)
+1. **Check hot memory first** — read `identity/memory.md` (already in context, might have the answer)
 2. **Check cold memory** — read relevant `memory/*.md` files (projects, decisions, preferences, people)
 3. **Search daily log archive** — FTS5 full-text search for raw conversation history
 

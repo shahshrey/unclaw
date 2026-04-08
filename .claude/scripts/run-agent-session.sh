@@ -7,7 +7,7 @@ set -eu
 export PATH="$HOME/.bun/bin:$HOME/.local/bin:/opt/homebrew/bin:$PATH"
 
 PROJECT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
-AGENT_ENV_FILE="$PROJECT_DIR/agent.env"
+AGENT_ENV_FILE="$PROJECT_DIR/config/agent.env"
 RUNTIME_DIR="$PROJECT_DIR/.claude/runtime"
 EVENT_LOG="$RUNTIME_DIR/agent-session-events.log"
 SESSION_ID="$(date '+%Y%m%d-%H%M%S')"

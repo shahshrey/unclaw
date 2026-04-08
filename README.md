@@ -36,7 +36,7 @@ Three commands. That's it.
 ```bash
 git clone https://github.com/shahshrey/unclaw my-agent
 cd my-agent
-claude    # then type: /setup
+claude   # then type: /setup
 ```
 
 Your agent picks a name, builds its memory structure, installs hooks, and optionally connects Telegram — all inside Claude Code. No `npm install`. No Docker. No build step.
@@ -89,7 +89,7 @@ Type `/setup` inside Claude Code. It walks you through everything:
 <summary>Alternative: shell-based setup</summary>
 
 ```bash
-./setup.sh
+./bin/setup.sh
 ```
 
 </details>
@@ -104,7 +104,7 @@ Type `/setup` inside Claude Code. It walks you through everything:
 
 **Zero lines of runtime code.** UnClaw is markdown files, shell scripts, and a Python indexer. There is no application to run, no process to manage, no binary to compile. Claude Code is the only process. UnClaw is the directory it reads on startup.
 
-**Config as architecture.** `SOUL.md` is the personality. `CLAUDE.md` is the operating system. `memory.md` is the brain. `.claude/rules/` are the guardrails. `.claude/skills/` are the capabilities. All plain text. All version-controlled. All natively understood by Claude Code without any adapter layer.
+**Config as architecture.** `identity/SOUL.md` is the personality. `CLAUDE.md` is the operating system. `identity/memory.md` is the brain. `.claude/rules/` are the guardrails. `.claude/skills/` are the capabilities. All plain text. All version-controlled. All natively understood by Claude Code without any adapter layer.
 
 **Built for one person.** Not a platform. Not a SaaS. A template that one person clones, personalizes, and owns. Your agent knows your name, your projects, your communication style. It's not designed to scale to a thousand users. It's designed to be perfect for one.
 
@@ -118,7 +118,7 @@ Type `/setup` inside Claude Code. It walks you through everything:
 
 ## What You Get
 
-- **Persistent identity** — SOUL.md personality + CLAUDE.md operational config, loaded every session
+- **Persistent identity** — identity/SOUL.md personality + CLAUDE.md operational config, loaded every session
 - **Long-term memory** — hot/cold/raw three-layer architecture with SQLite FTS5 full-text search
 - **Automatic daily logs** — session summaries captured via hooks, never lose context again
 - **Telegram messaging** — optional; chat with your agent from your phone
@@ -144,16 +144,17 @@ git clone https://github.com/shahshrey/unclaw dev-agent
 Each clone runs `/setup` independently. During setup, you tell Claude Code what this agent's role is — content writer, financial analyst, software engineer, research assistant, whatever. The setup skill generates domain-specific rules, skills, and guardrails tailored to that role.
 
 ```
-~/content-writer/          ~/financial-analyst/       ~/dev-agent/
-├── SOUL.md (writer)       ├── SOUL.md (analyst)      ├── SOUL.md (engineer)
-├── .claude/rules/         ├── .claude/rules/         ├── .claude/rules/
-│   └── domain.md          │   └── domain.md          │   └── domain.md
-│     (tone, SEO,          │     (data sourcing,       │     (code conventions,
-│      publishing)         │      model standards)     │      testing, linting)
-├── .claude/skills/        ├── .claude/skills/        ├── .claude/skills/
-│   └── (writing tools)    │   └── (analysis tools)   │   └── (dev tools)
-├── memory/                ├── memory/                ├── memory/
-└── Telegram: @writer_bot  └── Telegram: @analyst_bot └── Telegram: @dev_bot
+~/content-writer/              ~/financial-analyst/           ~/dev-agent/
+├── identity/                  ├── identity/                  ├── identity/
+│   └── SOUL.md (writer)       │   └── SOUL.md (analyst)      │   └── SOUL.md (engineer)
+├── .claude/rules/             ├── .claude/rules/             ├── .claude/rules/
+│   └── domain.md              │   └── domain.md              │   └── domain.md
+│     (tone, SEO,              │     (data sourcing,           │     (code conventions,
+│      publishing)             │      model standards)         │      testing, linting)
+├── .claude/skills/            ├── .claude/skills/            ├── .claude/skills/
+│   └── (writing tools)        │   └── (analysis tools)       │   └── (dev tools)
+├── memory/                    ├── memory/                    ├── memory/
+└── Telegram: @writer_bot      └── Telegram: @analyst_bot     └── Telegram: @dev_bot
 ```
 
 **Why this matters:**
@@ -164,7 +165,7 @@ Each clone runs `/setup` independently. During setup, you tell Claude Code what 
 
 - **Isolated security.** Each agent gets its own `.claude/rules/security.md` and domain guardrails. Your dev agent might have shell access to production servers. Your content writer never will. The isolation isn't application-level — it's directory-level. Separate directories, separate permissions, separate MCP server configs.
 
-- **Isolated memory.** Each agent has its own `memory.md`, its own daily logs, its own conversation history. Your financial analyst's context window isn't polluted with your dev agent's debugging sessions. The agent stays focused because its entire context is scoped to its domain.
+- **Isolated memory.** Each agent has its own `identity/memory.md`, its own daily logs, its own conversation history. Your financial analyst's context window isn't polluted with your dev agent's debugging sessions. The agent stays focused because its entire context is scoped to its domain.
 
 - **Isolated Telegram threads.** Each agent gets its own Telegram bot. Message `@writer_bot` for content help, `@analyst_bot` for financial questions. Clean separation — no confused context, no cross-domain bleed.
 
@@ -182,13 +183,13 @@ YOU (terminal / tmux / Telegram)
   ▼
 Claude Code (the only process)
   │
-  ├── reads CLAUDE.md ← @SOUL.md, @user.md, @memory.md, @rules
+  ├── reads CLAUDE.md ← @identity/SOUL.md, @identity/user.md, @identity/memory.md, @rules
   ├── discovers .claude/skills/ ← /heartbeat, /promote, /search-memory ...
   ├── runs hooks ← SessionStart, PreCompact, SessionEnd ...
   │
   ▼
 Memory (plain files, searched via SQLite FTS5)
-  ├── memory.md          → hot: always in context, <2500 tokens
+  ├── identity/memory.md → hot: always in context, <2500 tokens
   ├── memory/*.md        → cold: searched on-demand
   └── daily-logs/*.md    → raw: full history, indexed
 ```
@@ -200,10 +201,12 @@ That's it. No orchestrator. No message queue. No container runtime. Claude Code 
 | File | Purpose |
 |------|---------|
 | `CLAUDE.md` | Agent operating system — imports everything else |
-| `SOUL.md` | Personality, voice, boundaries |
-| `user.md` | Owner profile and preferences |
-| `memory.md` | Hot memory — always loaded, under 2500 tokens |
-| `agent.env` | Session name, channel config |
+| `identity/SOUL.md` | Personality, voice, boundaries |
+| `identity/user.md` | Owner profile and preferences |
+| `identity/memory.md` | Hot memory — always loaded, under 2500 tokens |
+| `config/agent.env` | Session name, channel config |
+| `bin/setup.sh` | Interactive setup script |
+| `bin/start-agent.sh` | Starts the agent in a tmux session |
 | `.claude/settings.json` | Hooks configuration |
 | `.claude/rules/` | Security, communication, domain guardrails |
 | `.claude/skills/` | All agent capabilities as skill files |
@@ -216,10 +219,10 @@ That's it. No orchestrator. No message queue. No container runtime. Claude Code 
 Three layers. Signal flows upward automatically.
 
 ```
-daily-logs/*.md  →  memory/*.md  →  memory.md
-    (raw)              (cold)         (hot)
-  indexed in         searched        loaded
-  SQLite FTS5        on-demand      every turn
+daily-logs/*.md  →  memory/*.md  →  identity/memory.md
+    (raw)              (cold)             (hot)
+  indexed in         searched            loaded
+  SQLite FTS5        on-demand          every turn
 ```
 
 | Layer | Loaded | What's in it |
@@ -228,7 +231,7 @@ daily-logs/*.md  →  memory/*.md  →  memory.md
 | **Cold** | On-demand | Project history, preferences, decisions, people |
 | **Raw** | Via search | Full conversation logs from every session |
 
-`/promote` extracts signal from raw → cold → hot. `/search-memory` queries across all three.
+`/promote` extracts signal from raw -> cold -> hot. `/search-memory` queries across all three.
 
 ---
 
@@ -270,10 +273,10 @@ Everything is plain text. Modify directly or tell your agent what to change — 
 
 | Want to change... | Edit this |
 |---|---|
-| Personality & voice | `SOUL.md` |
+| Personality & voice | `identity/SOUL.md` |
 | Operational rules | `.claude/rules/*.md` |
 | Capabilities | `.claude/skills/<name>/SKILL.md` |
-| What the agent remembers | `memory.md` or run `/memory-update` |
+| What the agent remembers | `identity/memory.md` or run `/memory-update` |
 | Scheduling | `templates/launchd/` or tell the agent |
 
 ---

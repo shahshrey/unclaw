@@ -10,11 +10,11 @@ echo "# Heartbeat Context Snapshot"
 echo "Generated: $NOW"
 echo ""
 
-echo "## Pending Items from memory.md"
-if [ -f "$PROJECT_DIR/memory.md" ]; then
-  grep -i -E "follow.?up|pending|todo|deadline|reminder|urgent" "$PROJECT_DIR/memory.md" 2>/dev/null || echo "No pending items found."
+echo "## Pending Items from identity/memory.md"
+if [ -f "$PROJECT_DIR/identity/memory.md" ]; then
+  grep -i -E "follow.?up|pending|todo|deadline|reminder|urgent" "$PROJECT_DIR/identity/memory.md" 2>/dev/null || echo "No pending items found."
 else
-  echo "No memory.md found."
+  echo "No identity/memory.md found."
 fi
 echo ""
 

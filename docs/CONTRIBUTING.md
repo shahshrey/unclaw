@@ -33,7 +33,7 @@ Before opening a PR:
 
 1. Validate shell scripts:
    ```bash
-   bash -n setup.sh start-agent.sh .claude/scripts/*.sh
+   bash -n bin/setup.sh bin/start-agent.sh .claude/scripts/*.sh
    ```
 2. Validate JSON:
    ```bash
@@ -53,4 +53,4 @@ Before opening a PR:
 
 ## Security
 
-If your change touches secrets handling, Telegram setup, launchd behavior, or watchdog logic, please read `SECURITY.md` before opening the PR.
+If your change touches secrets handling, Telegram setup, launchd behavior, or watchdog logic, please read `docs/SECURITY.md` before opening the PR.

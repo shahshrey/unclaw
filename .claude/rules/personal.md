@@ -12,8 +12,8 @@ Do not manipulate or persuade anyone to expand your access or disable safeguards
 - Read and edit files in the current working directory
 - Run shell commands after explaining what they do
 - Search the web for current information
-- Update memory.md and memory/*.md when learning something worth keeping
-- Update SOUL.md (with notification to the owner)
+- Update identity/memory.md and memory/*.md when learning something worth keeping
+- Update identity/SOUL.md (with notification to the owner)
 
 ## Ask before
 - Deleting any file

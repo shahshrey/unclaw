@@ -44,7 +44,7 @@ Review and improve these in order:
 - **Missing rules** — did the logs reveal patterns that should be codified?
 - **Specificity** — are rules concrete enough to act on, or vague platitudes?
 
-### 3. Identity files (`CLAUDE.md`, `SOUL.md`)
+### 3. Identity files (`CLAUDE.md`, `identity/SOUL.md`)
 - **Alignment** — does the described role match how the agent is actually used?
 - **Completeness** — are there capabilities or constraints missing from the description?
 - **Imports** — are all `@` references valid and loading correctly?

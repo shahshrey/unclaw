@@ -1,13 +1,13 @@
 #!/bin/bash
 # Interactive setup for a Claude Code personal agent.
-# Run once after cloning: ./setup.sh
+# Run once after cloning: ./bin/setup.sh
 
 set -eu
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SETTINGS_TEMPLATE="$PROJECT_DIR/templates/settings.json"
 SETTINGS_FILE="$PROJECT_DIR/.claude/settings.json"
-AGENT_ENV_FILE="$PROJECT_DIR/agent.env"
+AGENT_ENV_FILE="$PROJECT_DIR/config/agent.env"
 
 ensure_scaffold() {
   mkdir -p \
@@ -64,7 +64,7 @@ repls = {
     "{{EDITOR}}": editor,
     "{{COMMUNICATION_STYLE}}": comm_style,
 }
-for rel in ["CLAUDE.md", "SOUL.md", "user.md"]:
+for rel in ["CLAUDE.md", "identity/SOUL.md", "identity/user.md"]:
     path = project / rel
     if not path.exists():
         continue
@@ -73,7 +73,7 @@ for rel in ["CLAUDE.md", "SOUL.md", "user.md"]:
         text = text.replace(old, new)
     path.write_text(text)
 
-env_path = project / "agent.env"
+env_path = project / "config/agent.env"
 text = env_path.read_text() if env_path.exists() else 'AGENT_SESSION_NAME="agent"\nAGENT_CHANNEL=""\n'
 session_name = re.sub(r'[^a-z0-9_-]+', '-', agent_name.lower()).strip('-') or 'agent'
 text = re.sub(r'^AGENT_SESSION_NAME=".*"$', f'AGENT_SESSION_NAME="{session_name}"', text, flags=re.M)
@@ -189,7 +189,7 @@ if [ "$SETUP_LAUNCHD" = "y" ]; then
   generate_launchd "$SESSION_NAME" "$CHANNEL_VAL"
 fi
 
-chmod +x "$PROJECT_DIR/setup.sh" "$PROJECT_DIR/start-agent.sh" "$PROJECT_DIR/.claude/scripts/"*.sh 2>/dev/null || true
+chmod +x "$PROJECT_DIR/bin/setup.sh" "$PROJECT_DIR/bin/start-agent.sh" "$PROJECT_DIR/.claude/scripts/"*.sh 2>/dev/null || true
 
 echo ""
 echo "================================"
@@ -199,7 +199,7 @@ echo ""
 echo "Hooks installed: $SETTINGS_FILE"
 echo "Runtime config:  $AGENT_ENV_FILE"
 echo "Start your agent:"
-echo "  ./start-agent.sh"
+echo "  ./bin/start-agent.sh"
 echo ""
 echo "Attach to the session:"
 echo "  tmux attach -t $SESSION_NAME"

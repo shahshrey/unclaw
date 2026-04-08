@@ -22,10 +22,10 @@ Before personalizing anything:
 
 2. Ensure these critical files exist:
    - `CLAUDE.md`
-   - `SOUL.md`
-   - `user.md`
-   - `memory.md`
-   - `agent.env`
+   - `identity/SOUL.md`
+   - `identity/user.md`
+   - `identity/memory.md`
+   - `config/agent.env`
    - `.claude/settings.json`
    - `.claude/rules/*.md`
    - `.claude/scripts/*.sh`
@@ -46,7 +46,7 @@ Before personalizing anything:
 
 5. Ensure scripts are executable:
    ```bash
-   chmod +x start-agent.sh setup.sh .claude/scripts/*.sh
+   chmod +x bin/start-agent.sh bin/setup.sh .claude/scripts/*.sh
    ```
 
 ## Step 1: Gather identity and role
@@ -70,9 +70,9 @@ Ask the user for:
 
 Replace placeholders in:
 - `CLAUDE.md` — `{{AGENT_NAME}}`, `{{OWNER_NAME}}`, `{{AGENT_ROLE}}`
-- `SOUL.md` — `{{AGENT_NAME}}`, `{{OWNER_NAME}}`, `{{AGENT_ROLE}}`
-- `user.md` — `{{OWNER_NAME}}`, `{{OWNER_FULL_NAME}}`, `{{TIMEZONE}}`, `{{DOMAIN_EXPERTISE}}`, `{{OS}}`, `{{EDITOR}}`, `{{COMMUNICATION_STYLE}}`
-- `agent.env` — `AGENT_SESSION_NAME` (lowercase agent name), `AGENT_CHANNEL`
+- `identity/SOUL.md` — `{{AGENT_NAME}}`, `{{OWNER_NAME}}`, `{{AGENT_ROLE}}`
+- `identity/user.md` — `{{OWNER_NAME}}`, `{{OWNER_FULL_NAME}}`, `{{TIMEZONE}}`, `{{DOMAIN_EXPERTISE}}`, `{{OS}}`, `{{EDITOR}}`, `{{COMMUNICATION_STYLE}}`
+- `config/agent.env` — `AGENT_SESSION_NAME` (lowercase agent name), `AGENT_CHANNEL`
 - `.claude/rules/communication.md` — `{{OWNER_NAME}}`
 
 ### Generate `.claude/rules/domain.md`
@@ -88,7 +88,7 @@ Generate this file based on the chosen **role** and **domain expertise**. It sho
 
 Keep it concise (under 20 lines). The user can always expand it later.
 
-Use `agent.env` as the source of truth for runtime config:
+Use `config/agent.env` as the source of truth for runtime config:
 - `AGENT_SESSION_NAME` → lowercase agent name
 - `AGENT_CHANNEL` → blank by default, filled if messaging is configured
 - `TELEGRAM_STATE_DIR` → per-agent path, set only if Telegram is configured
@@ -137,7 +137,7 @@ After either path, verify the Telegram MCP server appears in the active MCP list
 
 Each agent gets its own Telegram state directory so multiple agents can run
 different bots on the same machine without conflict. The Telegram MCP plugin
-reads `TELEGRAM_STATE_DIR` from its environment; `agent.env` vars are auto-exported
+reads `TELEGRAM_STATE_DIR` from its environment; `config/agent.env` vars are auto-exported
 via `set -a` in the session scripts, so child processes (including MCP servers) inherit them.
 
 1. Create the per-agent state directory: `~/.claude/channels/telegram-<agent-name>/`
@@ -147,7 +147,7 @@ via `set -a` in the session scripts, so child processes (including MCP servers) 
    ```json
    {"dmPolicy": "pairing", "allowFrom": [], "groups": {}, "pending": {}}
    ```
-4. Write these lines into `agent.env`:
+4. Write these lines into `config/agent.env`:
    ```
    AGENT_CHANNEL="plugin:telegram@claude-plugins-official"
    TELEGRAM_STATE_DIR="$HOME/.claude/channels/telegram-<agent-name>"
@@ -171,7 +171,7 @@ After the agent is started and Telegram is connected:
 
 If the user doesn't have the code yet or the pending entry hasn't appeared, wait a moment and re-read the file. The bot writes the pending entry when it receives the first DM.
 
-If no, leave `AGENT_CHANNEL=""` and `TELEGRAM_STATE_DIR` commented out in `agent.env` — tmux-only mode is valid.
+If no, leave `AGENT_CHANNEL=""` and `TELEGRAM_STATE_DIR` commented out in `config/agent.env` — tmux-only mode is valid.
 
 ## Step 4: Hooks (required)
 
@@ -202,7 +202,7 @@ If no, skip — the agent still works, but recurring tasks must be run manually 
 ## Step 6: Start the agent
 
 ```bash
-./start-agent.sh
+./bin/start-agent.sh
 ```
 
 ## Step 7: Verify

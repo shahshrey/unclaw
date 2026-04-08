@@ -7,7 +7,7 @@
 	<key>ProgramArguments</key>
 	<array>
 		<string>/bin/bash</string>
-		<string>{{PROJECT_DIR}}/start-agent.sh</string>
+		<string>{{PROJECT_DIR}}/bin/start-agent.sh</string>
 	</array>
 	<key>EnvironmentVariables</key>
 	<dict>
