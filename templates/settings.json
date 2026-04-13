@@ -36,17 +36,6 @@
         ]
       }
     ],
-    "SessionEnd": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Session is ending. If this session had any meaningful interaction (not just startup), write a brief summary to daily-logs/$(date '+%Y-%m-%d').md. Append with a ## heading showing current time. Include what was discussed or accomplished in 2-5 bullets. If the session was trivial or empty (no user messages), just skip — do NOT write 'Session ended' lines. After writing (or skipping), run: python3 .claude/scripts/index-daily-logs.py"
-          }
-        ]
-      }
-    ],
     "PostCompact": [
       {
         "matcher": "",

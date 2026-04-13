@@ -38,7 +38,6 @@ Before personalizing anything:
    - `SessionStart`
    - `Notification`
    - `PreCompact`
-   - `SessionEnd`
    - `PostCompact`
    - `PostToolUse`
 
@@ -103,13 +102,19 @@ If yes, walk through the prerequisites first, then configure the channel.
 
 Handle these before configuring the channel. Do each silently and report the result to the user.
 
-#### 1. Bun
+#### 1. Claude Code channels
+
+Check `~/.claude/settings.json` for `"DISABLE_TELEMETRY": "1"` in the `env` object.
+- If present, remove it. Claude Code uses feature flags for channels, and this setting causes `--channels` to fall back to "Channels are not currently available."
+- Also check shell profiles for `DISABLE_TELEMETRY` or `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`. If either is exported there, remove it and restart the terminal.
+
+#### 2. Bun
 
 The Telegram MCP server runs on Bun. Run `bun --version` to check.
 - If installed, tell the user which version is present and move on.
 - If not found, install it with `curl -fsSL https://bun.sh/install | bash`, then verify with `bun --version`. Tell the user it was installed.
 
-#### 2. Telegram bot token
+#### 3. Telegram bot token
 
 The user needs to create a bot through BotFather — this is the one step that requires manual action on their phone/desktop. Tell the user:
 
@@ -119,19 +124,19 @@ The user needs to create a bot through BotFather — this is the one step that r
 
 Wait for the user to provide the token before proceeding.
 
-#### 3. Telegram plugin
+#### 4. Telegram plugin
 
-Check if the Telegram plugin is already installed by looking for it in the active MCP server list or checking `~/.claude/plugins/` for the `telegram@claude-plugins-official` entry.
+Check if the Telegram plugin is already installed by running `claude plugin list 2>&1 | grep -i telegram` or checking `~/.claude/plugins/installed_plugins.json`.
 
-- If already installed, tell the user it's present and move on.
-- If not installed, run these in the Claude Code session:
+- If already installed and enabled, tell the user it's present and move on.
+- If not installed, tell the user to run these in a Claude Code session:
   ```
   /plugin install telegram@claude-plugins-official
   /reload-plugins
   ```
   If running inside Cursor rather than the Claude Code CLI, add the Telegram MCP server entry to `.cursor/mcp.json` instead (see the plugin's README for the server command and args).
 
-After either path, verify the Telegram MCP server appears in the active MCP list. Tell the user the result.
+After either path, verify the Telegram plugin appears in the installed list. Tell the user the result. Also verify if the Telegram MCP server appears in the active MCP list.
 
 ### Per-agent Telegram isolation
 
@@ -167,7 +172,14 @@ After the agent is started and Telegram is connected:
 4. Extract the `senderId` from the pending entry.
 5. Add the `senderId` to the `allowFrom` array and remove it from `pending`.
 6. Write the updated `access.json`.
-7. Tell the user they're paired — the bot will now respond to their DMs.
+7. Create the approval notification: `mkdir -p ~/.claude/channels/telegram-<agent-name>/approved`
+   then write the `senderId` to `~/.claude/channels/telegram-<agent-name>/approved/<senderId>`.
+   The bot polls this directory and sends a "Paired!" confirmation to the user.
+8. Tell the user they're paired — the bot will now respond to their DMs.
+
+Do not rely on `/telegram:access pair` for per-agent setups. That command reads
+`~/.claude/channels/telegram/access.json` instead of the per-agent directory.
+For isolated bots, pair by editing the per-agent `access.json` directly.
 
 If the user doesn't have the code yet or the pending entry hasn't appeared, wait a moment and re-read the file. The bot writes the pending entry when it receives the first DM.
 
@@ -196,6 +208,7 @@ If yes:
 4. Validate them with `plutil -lint`
 5. Unload old versions if present, then `launchctl load` the new ones
 6. Verify with `launchctl list | grep <session>`
+7. If the assistant job exits with `Operation not permitted` or exit code `126`, tell the user to grant Full Disk Access to `/bin/bash` in **System Settings → Privacy & Security → Full Disk Access**. Until then, they should start the agent manually after reboot.
 
 If no, skip — the agent still works, but recurring tasks must be run manually or via `/loop`.
 
@@ -205,13 +218,19 @@ If no, skip — the agent still works, but recurring tasks must be run manually 
 ./bin/start-agent.sh
 ```
 
+Then verify the tmux session reaches the `❯` prompt. If Claude shows the workspace trust prompt,
+accept it and re-check the pane. If it shows "Channels are not currently available," go back to
+Step 3 prerequisite 1.
+
 ## Step 7: Verify
 
-- Check tmux session exists
+- Check tmux session exists: `tmux has-session -t <session>`
 - Check `.claude/settings.json` exists and includes the required hooks
-- If launchd was enabled, verify the jobs are loaded
-- If Telegram was enabled, run `/mcp` and confirm the Telegram MCP is connected
-- Send a test message if the channel is configured
+- Capture the tmux pane and confirm you see:
+  - `Listening for channel messages from: plugin:telegram@...` (if Telegram enabled)
+  - `❯` prompt (session is ready)
+  - No "Channels are not currently available" warning
+- If launchd was enabled, verify the jobs are loaded: `launchctl list | grep <session>`
 
 ## Step 8: Confirm
 
@@ -219,3 +238,4 @@ Tell the user:
 - how to attach: `tmux attach -t <session>`
 - which recurring tasks are automatic vs manual
 - that hooks are installed and daily logs/memory promotion will work
+- if Telegram is set up, confirm the pairing worked and the bot responds
