@@ -1,6 +1,6 @@
 ---
 name: search-memory
-description: Search through all past daily logs, cold memory files, and conversation history. Use when Shrey asks "when did we...", "do you remember...", "what did I say about...", or needs context from a past session.
+description: Search through all past daily logs, cold memory files, and conversation history. Use when {{OWNER_NAME}} asks "when did we...", "do you remember...", "what did I say about...", or needs context from a past session.
 allowed-tools: Bash Read
 ---
 

@@ -8,7 +8,7 @@ Session distillation — save this session's context to the daily log:
 
 1. Summarize what was accomplished in this session (3-5 bullets)
 2. List any open tasks or threads left unfinished
-3. Extract any preferences or patterns Shrey demonstrated
+3. Extract any preferences or patterns {{OWNER_NAME}} demonstrated
 4. Append to `daily-logs/YYYY-MM-DD.md` (today's date) under a `## [HH:MM] Session Distill` heading
    - Create the file with a `# Daily Log — YYYY-MM-DD` header if it doesn't exist
 5. Also append a one-liner to `identity/memory.md` under `## Session Log`:

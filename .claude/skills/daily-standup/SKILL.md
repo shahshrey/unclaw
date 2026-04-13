@@ -1,6 +1,6 @@
 ---
 name: daily-standup
-description: Run the morning standup. Use when Shrey says "good morning", "standup", or "what's on my plate".
+description: Run the morning standup. Use when {{OWNER_NAME}} says "good morning", "standup", or "what's on my plate".
 ---
 
 Give a morning briefing:

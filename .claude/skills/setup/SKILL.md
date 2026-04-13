@@ -73,6 +73,9 @@ Replace placeholders in:
 - `identity/user.md` — `{{OWNER_NAME}}`, `{{OWNER_FULL_NAME}}`, `{{TIMEZONE}}`, `{{DOMAIN_EXPERTISE}}`, `{{OS}}`, `{{EDITOR}}`, `{{COMMUNICATION_STYLE}}`
 - `config/agent.env` — `AGENT_SESSION_NAME` (lowercase agent name), `AGENT_CHANNEL`
 - `.claude/rules/communication.md` — `{{OWNER_NAME}}`
+- `.claude/skills/daily-standup/SKILL.md` — `{{OWNER_NAME}}`
+- `.claude/skills/distill-session/SKILL.md` — `{{OWNER_NAME}}`
+- `.claude/skills/search-memory/SKILL.md` — `{{OWNER_NAME}}`
 
 ### Generate `.claude/rules/domain.md`
 
